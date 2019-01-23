@@ -5,16 +5,20 @@
 
 static std::atomic<int> refcount{ 0 };
 
-global::Init::Init() {
+namespace global::detail {
+
+[[gnu::constructor]] static void _init() {
     if (refcount.fetch_add(1) == 0) {
         std::ofstream ofs{ "output.txt" };
-        ofs << "ctor " << this << '\n';
+        ofs << "ctor\n";
     }
 }
 
-global::Init::~Init() {
+[[gnu::destructor]] static void _deinit() {
     if (refcount.fetch_sub(1) == 1) {
         std::ofstream ofs{ "output.txt", std::ios_base::app };
-        ofs << "dtor " << this << '\n';
+        ofs << "dtor\n";
     }
 }
+
+} // namespace global::detail

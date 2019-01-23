@@ -8,7 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 include_directories(include)
 
-add_library(global STATIC src/global.cpp)
+add_library(global SHARED src/global.cpp)
 
 add_executable(client src/client_main.cpp src/client_a.cpp src/client_b.cpp)
 add_dependencies(client global)
