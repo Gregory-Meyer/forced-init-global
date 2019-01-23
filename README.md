@@ -10,8 +10,8 @@ a message to "output.txt". When the client is compiled and run on my system,
 here is the contents of "output.txt":
 
 ```
-ctor
-dtor
+Init() invoked for the first time
+~Init() invoked for the last time
 ```
 
 ## Disassembled Executable
