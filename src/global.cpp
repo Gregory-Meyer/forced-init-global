@@ -7,18 +7,23 @@ static std::atomic<int> refcount{ 0 };
 
 namespace global::detail {
 
-[[gnu::constructor]] static void _init() {
-    if (refcount.fetch_add(1) == 0) {
-        std::ofstream ofs{ "output.txt" };
-        ofs << "ctor\n";
+class Init {
+public:
+    Init() {
+        if (refcount.fetch_add(1) == 0) {
+            std::ofstream ofs{ "output.txt" };
+            ofs << "Init() invoked for the first time\n";
+        }
     }
-}
 
-[[gnu::destructor]] static void _deinit() {
-    if (refcount.fetch_sub(1) == 1) {
-        std::ofstream ofs{ "output.txt", std::ios_base::app };
-        ofs << "dtor\n";
+    ~Init() {
+        if (refcount.fetch_sub(1) == 1) {
+            std::ofstream ofs{ "output.txt", std::ios_base::app };
+            ofs << "~Init() invoked for the last time\n";
+        }
     }
-}
+};
+
+static Init init_instance;
 
 } // namespace global::detail
